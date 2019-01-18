@@ -11,7 +11,7 @@ class UNetwork():
 
     def model(self, image_height, image_width, image_channel):
         self.inputs = tf.placeholder(tf.float32, [None, image_height, image_width, image_channel])
-        # Contracting Path
+        # Contracting Path #
         c1_1 = self.conv(self.inputs, 64)
         c1_2 = self.conv(c1_1, 64)
         c2_1 = self.max_pool(c1_2)
@@ -23,11 +23,11 @@ class UNetwork():
         c4_1 = self.max_pool(c3_3)
         c4_2 = self.conv(c4_1, 512)
         c4_3 = self.conv(c4_2, 512)
-        ################
+        ##################
         c5_1 = self.max_pool(c4_3)
         c5_2 = self.conv(c5_1, 1024)
         c5_3 = self.conv(c5_2, 1024)
-        # Expansive Path
+        # Expansive Path #
         c_4_1= self.up_conv(c5_3, 512)
         c_4_1= self.copy_and_crop(c4_3, c_4_1)
         c_4_2= self.conv(c_4_1, 512)

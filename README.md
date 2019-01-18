@@ -8,11 +8,10 @@
 - tensorflow v1.4
 
 ## How to use
-- `python3 main.py --todo [todo]`
-    - [todo] : train or test
+- `python3 main.py --todo [train or test]`
 
 ### Data Source
-- [Data set](./data) is from [another github repository](https://github.com/zhixuhao/unet).
+- [Data set](./data) is from [another github repository](https://github.com/zhixuhao/unet/tree/master/data/membrane).
 - Original data set can be downloaded from [isbi challenge cite](http://brainiac2.mit.edu/isbi_challenge/).
 
 ### Result
