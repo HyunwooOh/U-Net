@@ -28,22 +28,23 @@ def train(args):
             loss_sum += loss_val
             b+=batch_size
         print("Epoch: %4d | Loss: %.8f"%(epoch, loss_sum/total_steps))
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    print("Saving model...")
-    saver.save(sess, save_path + "model.cptk")
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        if (epoch+1) % 1000 == 0:
+            print("Saving model...")
+            saver.save(sess, save_path + "model_"+str(epoch+1)+".cptk")
 
 def test(args):
-    save_path = "./_save_model/"
-    input_data_path = "./data/train/X"
-    label_data_path = "./data/train/Y"
+    save_path = "./save_model/"
+    input_data_path = "./data/test/X"
+    label_data_path = "./data/test/Y"
     inputs_np, num_images = read_input_images(args, input_data_path) # inputs_np shape: [60, 256, 256, 1]
     labels_np, _ = read_label_images(args, label_data_path) # labels_np shape: [60, 256, 256, 1]
 
     model = UNetwork(args.input_shape, args.label_shape)
     sess = tf.Session()
     saver = tf.train.Saver(max_to_keep=None)
-    saver.restore(sess, save_path+"model.cptk")
+    saver.restore(sess, save_path+"model_1000.cptk")
     image_index = random.randint(1, num_images)
     input_image = inputs_np[image_index]
     sample = sess.run(model.logits, feed_dict={model.inputs:np.float32(np.reshape(input_image, [1]+args.input_shape)/255.)})

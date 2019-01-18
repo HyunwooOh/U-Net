@@ -44,9 +44,8 @@ class UNetwork():
         c_1_1= self.copy_and_crop(c1_2, c_1_1)
         c_1_2= self.conv(c_1_1, 64)
         c_1_3= self.conv(c_1_2, 64)
-        c_1_4 = self.conv(c_1_3, 2, kernel_size=1)
-        c_1_5 = self.conv(c_1_4, 1, kernel_size=1, activation_fn=tf.nn.sigmoid)
-        return c_1_5
+        c_1_4 = self.conv(c_1_3, 1, kernel_size=1, activation_fn=tf.nn.sigmoid)
+        return c_1_4
 
     def conv(self, inputs, num_outputs, kernel_size=3, stride=1, activation_fn=tf.nn.relu):
         return layers.conv2d(inputs=inputs, num_outputs=num_outputs, kernel_size=kernel_size, stride=stride, padding="SAME", activation_fn=activation_fn)
@@ -67,4 +66,3 @@ class UNetwork():
         crop = tf.image.crop_to_bounding_box(source, offset_h, offset_w, target_h, target_w)
         copy = tf.concat([crop, target], -1)
         return copy
-
