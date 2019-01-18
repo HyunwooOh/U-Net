@@ -1,7 +1,7 @@
 # U-Net
 - Tensorflow implementations of U-Net: Convolutional Networks for Biomedical Image Segmentation.
 - U-Net 을 구현했습니다.
-- <img src= "/assets/network.png" width="50%" height="50%">
+- <img src= "/assets/network.png" width="100%" height="100%">
 
 ## Requirements
 - Python v3.6
@@ -16,7 +16,7 @@
 - Original data set can be downloaded from [isbi challenge cite](http://brainiac2.mit.edu/isbi_challenge/).
 
 ### Result
-- <img src= "/assets/result.png" width="50%" height="50%">
+- <img src= "/assets/result.png" width="100%" height="100%">
 
 ## References
 - Studies
