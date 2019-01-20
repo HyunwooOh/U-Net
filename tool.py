@@ -3,24 +3,14 @@ import numpy as np
 from os import listdir
 import tensorflow as tf
 
-def read_input_images(args, path):
+def read_images(path, shape):
     file_list = [f for f in listdir(path)]
     file_list.sort()
-    images_np = np.zeros(shape=[1]+args.input_shape)
+    images_np = np.zeros(shape=[1]+shape)
     for file in file_list:
         image_PIL = pilimg.open(path+"/"+file)
-        resized_image_np = np.array(image_PIL.resize((args.input_shape[:-1])))
-        images_np = np.append(images_np, resized_image_np.reshape([1]+args.input_shape), axis=0)
-    return images_np[1:], images_np.shape[0]
-
-def read_label_images(args, path):
-    file_list = [f for f in listdir(path)]
-    file_list.sort()
-    images_np = np.zeros(shape=[1]+args.label_shape)
-    for file in file_list:
-        image_PIL = pilimg.open(path+"/"+file)
-        resized_image_np = np.array(image_PIL.resize((args.label_shape[:-1])))
-        images_np = np.append(images_np, resized_image_np.reshape([1]+args.label_shape), axis=0)
+        resized_image_np = np.array(image_PIL.resize((shape[:-1])))
+        images_np = np.append(images_np, resized_image_np.reshape([1]+shape), axis=0)
     return images_np[1:], images_np.shape[0]
 
 def next_batch(inputs_np, labels_np, b, batch_size):
