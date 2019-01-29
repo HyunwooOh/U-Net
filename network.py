@@ -1,11 +1,9 @@
 import tensorflow as tf
-import tensorflow.contrib.layers as layers
-
 class UNetwork():
-    def __init__(self, input_shape, output_shape):
-        if input_shape != output_shape: self.padding = "VALID"
-        else: self.padding = "SAME"
-
+    def __init__(self, input_shape, output_shape, drop_out=False):
+        if input_shape != output_shape: self.padding = "valid"
+        else: self.padding = "same"
+        self.drop_out = drop_out
         self.optimizer = tf.train.AdamOptimizer(learning_rate=1e-4)
         self.logits = self.model(input_shape)
         self.labels = tf.placeholder(tf.float32, [None]+output_shape)
@@ -47,17 +45,24 @@ class UNetwork():
         c_1_1= self.copy_and_crop(c1_2, c_1_1)
         c_1_2= self.conv(c_1_1, 64)
         c_1_3= self.conv(c_1_2, 64)
-        c_1_4 = self.conv(c_1_3, 1, kernel_size=1, activation_fn=tf.nn.sigmoid)
+        c_1_4 = self.conv(c_1_3, 1, kernel_size=1, activation=tf.keras.activations.sigmoid)
         return c_1_4
 
-    def conv(self, inputs, num_outputs, kernel_size=3, stride=1, activation_fn=tf.nn.relu):
-        return layers.conv2d(inputs=inputs, num_outputs=num_outputs, kernel_size=kernel_size, stride=stride, padding=self.padding, activation_fn=activation_fn)
+    def conv(self, input, num_outputs, kernel_size=3, stride=1, activation=tf.keras.activations.relu):
+        tmp = tf.keras.layers.Conv2D(filters = num_outputs, kernel_size = kernel_size, strides = [stride, stride], padding = self.padding, activation = None)(input)
+        tmp = tf.keras.layers.BatchNormalization()(tmp)
+        tmp = activation(tmp)
+        if self.drop_out == True: return tf.keras.layers.Dropout(rate=0.5)(tmp)
+        else: return tmp
 
-    def max_pool(self, input, kernel_size=2, stride=2):
-        return layers.max_pool2d(inputs=input, kernel_size=kernel_size, stride=stride)
+    def max_pool(self, input, pool_size=2, stride=2):
+        return tf.keras.layers.MaxPool2D(pool_size=(pool_size, pool_size), strides=stride)(input)
 
-    def up_conv(self, inputs, num_outputs, kernel_size=2, stride=2, activation_fn=tf.nn.relu):
-        return layers.conv2d_transpose(inputs = inputs, num_outputs=num_outputs, kernel_size=kernel_size, stride=stride, padding=self.padding,  activation_fn=activation_fn)
+    def up_conv(self, input, num_outputs, kernel_size=2, stride=2, activation=tf.keras.activations.relu):
+        tmp = tf.keras.layers.Conv2DTranspose(filters = num_outputs, kernel_size = kernel_size, strides = (stride, stride), padding = self.padding, activation = None)(input)
+        tmp = tf.keras.layers.BatchNormalization()(tmp)
+        tmp = activation(tmp)
+        return tmp
 
     def copy_and_crop(self, source, target):
         source_h = int(source.get_shape().as_list()[1])

@@ -8,11 +8,16 @@
 - tensorflow v1.4
 
 ## How to use
-- `python3 main.py --todo [train or test]`
+- `python3 main.py --todo [train or test or img_aug]`
 
 ### Data Source
 - Original data set can be downloaded from [isbi challenge cite](http://brainiac2.mit.edu/isbi_challenge/).
 - [Image Augmentation](img_aug.py) : Original data set 이 적어서 rotation, cropping 을 이용해 데이터를 생성했습니다.
+    - [Original data](./original_data) (30 * (512, 512)) - rotation - central cropping - random cropping -> [new data](./new_data) (300 * (256, 256))
+
+### 과적합 방지
+- 데이터셋 300 -> 1500 : 정확도 90% -> 92%
+- 배치정규화 : 정확도 92% -> 93%
 
 ### Result
 - 1000 epoch 학습한 후,
@@ -22,7 +27,8 @@
         - <img src= "/assets/test_data_result.png" width="100%" height="100%">
 ### To be added
 - ~~Image Augmentation~~
-- 과적합 방지 
+- ~~Batch Normalization~~
+- Drop Out
 
 
 ## References

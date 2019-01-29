@@ -52,7 +52,7 @@ def random_aug(name, new_input_data_path, new_label_data_path, origin_images):
     cropped_label_images = pilimg.fromarray(cropped_label_images.astype(np.uint8))
     cropped_label_images.save(new_label_data_path+"/Y_"+str(name)+".png")
 
-def aug():
+def aug(args):
     origin_input_data_path = "./original_data/X"
     origin_label_data_path = "./original_data/Y"
     new_input_data_path = "./new_data/X"
@@ -63,10 +63,7 @@ def aug():
     origin_label_images_np, _ = read_images(origin_label_data_path) # inputs_np shape: [30, 512, 512]
     origin_images_np = np.concatenate([np.reshape(origin_input_images_np, [num_images, 512, 512, 1]), np.reshape(origin_label_images_np, [num_images, 512, 512, 1])], axis=-1) # [30, 512, 512, 2]
     name = 0
-    for j in range(30):
+    for j in range(args.aug_size):
         for i in range(num_images):
             name+=1
             random_aug(name, new_input_data_path, new_label_data_path, origin_images_np[i])
-
-if __name__ == "__main__":
-    aug()
